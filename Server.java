@@ -42,6 +42,7 @@ public class Server implements Banco{
                 account.update(balance);
                 System.out.println("New balance set");
                 System.out.println();
+                account.free();
                 return true;
             }
         }
@@ -51,10 +52,15 @@ public class Server implements Banco{
     }
 
     @Override
-    public double read(String accountId) throws RemoteException {
+    public double read(String accountId, boolean block) throws RemoteException {
         System.out.printf("Trying to read account %s\n", accountId);
         for(Account account : this.accounts) {
             if(account.getId().equals(accountId)){
+                while(!account.getAvailability()){
+                    //wait for it to be free
+                }
+                if (block)
+                    account.block();
                 System.out.println("Account found");
                 System.out.println("Read performed");
                 System.out.println();

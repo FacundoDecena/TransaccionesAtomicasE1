@@ -9,7 +9,7 @@ public class Client {
 
     private static boolean newDeposite(String id, double deposite, Banco stub) {
         try {
-            double currentBalance = stub.read(id);
+            double currentBalance = stub.read(id, true);
             currentBalance += deposite;
             return stub.write(id, currentBalance);
 
@@ -50,7 +50,7 @@ public class Client {
 
     private static boolean newWithdrawal(String id, double withdrawal, Banco stub){
         try {
-            double currentBalance = stub.read(id);
+            double currentBalance = stub.read(id, true);
             // If currentBalance >= withdrawal
             if(currentBalance > withdrawal || Math.abs(currentBalance - withdrawal) < EPSILON ){
                 currentBalance -= withdrawal;
@@ -98,7 +98,7 @@ public class Client {
 
     private static double readBalance(String id, Banco stub){
         try {
-            return stub.read(id);
+            return stub.read(id, false);
         } catch (RemoteException e) {
             System.err.println("No se encontro la cuenta");
             return -1;
