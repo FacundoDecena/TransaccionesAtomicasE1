@@ -68,6 +68,17 @@ public class Server implements Banco{
         throw new RemoteException("No such ID");
     }
 
+    @Override
+    public void forceFree(String accountId){
+        for(Account account : this.accounts)
+            try {
+                if (account.getId().equals(accountId))
+                    account.free();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+    }
+
     public static void main(String args[]) {
         try {
             Server obj = new Server();

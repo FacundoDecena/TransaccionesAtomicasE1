@@ -56,6 +56,7 @@ public class Client {
                 currentBalance -= withdrawal;
                 return stub.write(id, currentBalance);
             }
+            stub.forceFree(id);
             System.err.println("Sin fondos suficientes");
             return false;
 
