@@ -87,7 +87,7 @@ public class Client {
         
         if(newWithdrawal(id, deposite, stub)){
             System.out.println("Retire su dinero");
-            System.out.printf("[($%.02f)]",deposite);
+            System.out.printf("[($%.02f)]\n",deposite);
         }
         else
             System.out.println("No se efectuo el retiro");
