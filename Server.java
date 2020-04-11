@@ -8,8 +8,8 @@ import java.rmi.RemoteException;
 public class Server implements Banco{
 
     private List<Account>accounts;
-    private static final String HOST = "localhost";
     private static final int PORT = 3001;
+    private static Registry registry;
 
     public Server() throws java.rmi.RemoteException{
         this.accounts = new ArrayList<>();
@@ -23,6 +23,7 @@ public class Server implements Banco{
         accounts.add(new Account("000-7"));
         accounts.add(new Account("000-8"));
         accounts.add(new Account("000-9"));
+        registry = LocateRegistry.createRegistry(PORT);
     }
 
     @Override
@@ -34,7 +35,7 @@ public class Server implements Banco{
 
     @Override
     public boolean write(String accountId, double balance) throws RemoteException {
-        System.out.printf("Trying to set new balance for account %s, $f\n", accountId, balance);
+        System.out.printf("Trying to set new balance for account %s, %f\n", accountId, balance);
         for(Account account : this.accounts) {
             if(account.getId().equals(accountId)){
                 System.out.println("Account found");
@@ -65,17 +66,11 @@ public class Server implements Banco{
     }
 
     public static void main(String args[]) {
-	/*
-        if(System.getSecurityManager()==null){
-        	System.setSecurityManager(new SecurityManager());
-        }	
-    */
         try {
             Server obj = new Server();
             Banco stub = (Banco) UnicastRemoteObject.exportObject(obj, 0);
     
             // Bind the remote object's stub in the registry
-            Registry registry = LocateRegistry.getRegistry(HOST,PORT);
             registry.bind("Banco", stub);
     
             System.err.println("SERVIDOR LISTO Y ESPERANDO ...");

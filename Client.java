@@ -114,7 +114,7 @@ public class Client {
         double currentBalance = readBalance(id, stub);
         if(currentBalance > 0 || Math.abs(currentBalance - 0) < EPSILON){
             System.out.print("Su saldo es de $");
-            System.out.println(readBalance(id, stub));
+            System.out.println(currentBalance);
         } else
         System.out.println("");
 
@@ -123,7 +123,7 @@ public class Client {
 
     public static void main(String[] args){
         String host = (args.length < 1) ? "localhost" : args[0];
-        String stringPort = (args.length < 2) ? "3001" : args[0];
+        String stringPort = (args.length < 2) ? "3001" : args[1];
         Scanner scan = new Scanner(System.in);
 
         try{
@@ -159,14 +159,12 @@ public class Client {
             }
             scan.close();
 
-
         } catch(NumberFormatException e){
             System.err.println("Client exception: Invalid port");
         }catch (Exception e) {
             System.err.println("Client exception: " + e.toString());
             e.printStackTrace();
         }
-
     }
 
 }
