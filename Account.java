@@ -1,16 +1,19 @@
 import java.rmi.RemoteException;
+import java.util.concurrent.Semaphore;
 
-public class Account implements AccountInterface {
+public class Account implements AccountInterface{
 
     private static final long serialVersionUID = 761044890242705632L;
     private String id;
     private double balance;
     private boolean available;
+    private Semaphore semaphore;
 
     public Account(String id) {
         this.id = id;
         this.balance = 0.0;
         available = true;
+        semaphore = new Semaphore(1);
     }
 
     @Override
@@ -35,17 +38,15 @@ public class Account implements AccountInterface {
 
     @Override
     public void block() throws RemoteException {
-        this.available = false;
-        try {
-            wait();
-        } catch (InterruptedException e) {
+        try{
+            semaphore.acquire();
+        }catch(InterruptedException e){
             e.printStackTrace();
         }
     }
 
     @Override
     public void free() throws RemoteException {
-        this.available = true;
-        notify();
+       semaphore.release();
     }
 }

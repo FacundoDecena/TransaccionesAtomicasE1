@@ -56,9 +56,6 @@ public class Server implements Banco{
         System.out.printf("Trying to read account %s\n", accountId);
         for(Account account : this.accounts) {
             if(account.getId().equals(accountId)){
-                while(!account.getAvailability()){
-                    //wait for it to be free
-                }
                 if (block)
                     account.block();
                 System.out.println("Account found");
