@@ -7,7 +7,7 @@ import java.rmi.RemoteException;
 
 public class Server implements Banco{
 
-    private List<Account>accounts;
+    private final List<Account>accounts;
     private static final int PORT = 3001;
     private static Registry registry;
 
@@ -42,7 +42,8 @@ public class Server implements Banco{
                 account.update(balance);
                 System.out.println("New balance set");
                 System.out.println();
-                account.free();
+                /* DESCOMENTE LA SIGUIENTE LINEA PARA EVITAR ERRORES*/
+                //account.free();
                 return true;
             }
         }
@@ -56,8 +57,9 @@ public class Server implements Banco{
         System.out.printf("Trying to read account %s\n", accountId);
         for(Account account : this.accounts) {
             if(account.getId().equals(accountId)){
-                if (block)
-                    account.block();
+                /* DESCOMENTE LAS SIGUIENTES LINEA PARA EVITAR ERRORES*/
+                //if (block)
+                //    account.block();
                 System.out.println("Account found");
                 System.out.println("Read performed");
                 System.out.println();
@@ -79,7 +81,18 @@ public class Server implements Banco{
             }
     }
 
-    public static void main(String args[]) {
+    @Override
+    public double getBalance() throws RemoteException{
+        System.out.println("Reading balance");
+        double balance = 0.0;
+        for(Account account : this.accounts) {
+            balance += account.getBalance();
+        }
+        System.out.printf("Banco Nacional de San Luis has $%f\n", balance);
+        return balance;
+    }
+
+    public static void main(String[] args) {
         try {
             Server obj = new Server();
             Banco stub = (Banco) UnicastRemoteObject.exportObject(obj, 0);

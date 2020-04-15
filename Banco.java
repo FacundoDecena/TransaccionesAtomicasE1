@@ -6,4 +6,5 @@ public interface Banco extends Remote {
     boolean write(String accountId, double balance) throws RemoteException;
     double read(String accountId, boolean block) throws RemoteException;
     void forceFree(String accountId) throws RemoteException;
+    double getBalance() throws RemoteException;
 }
